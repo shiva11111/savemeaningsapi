@@ -59,4 +59,11 @@ Router.route("/all").get((req, res) => {
   });
 });
 
+Router.route("/get/:word").get((req, res) => {
+  let word = req.params.word;
+  Meaning.find({ word: word }, function(err, r) {
+    if (r) res.status(200).send(r);
+    if (err) res.status(400).send("unable to find meaning");
+  });
+});
 module.exports = Router;

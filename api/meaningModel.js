@@ -6,14 +6,14 @@ const Meaning = new Schema(
     word: {
       type: String,
     },
-    definition: {
-      type: String,
+    definitions: {
+      type: Array,
     },
-    example: {
-      type: String,
+    examples: {
+      type: Array,
     },
     synonyms: {
-      type: String,
+      type: Array,
     },
   },
   {

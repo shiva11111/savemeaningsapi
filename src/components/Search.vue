@@ -37,7 +37,10 @@
           <li class="list-group-item">synonyms: {{ meaning.synonyms }}</li>
         </ul>
       </div>
-      <button class="btn btn-success">save</button>
+      <h4 v-if="exists">Meaning already saved</h4>
+      <button v-else class="btn btn-success" @click.prevent="saveMeaning">
+        save
+      </button>
     </div>
   </div>
 </template>
@@ -47,11 +50,27 @@ export default {
     return {
       meaning: {},
       word: "",
+      exists: false,
     };
   },
   methods: {
+    async searchDB() {
+      await this.axios
+        .get("http://localhost:4000/word/get/" + this.word)
+        .then((r) => {
+          if (r.data.length > 0) {
+            this.exists = true;
+          } else {
+            this.exists = false;
+          }
+        })
+        .catch(() => {
+          this.exists = false;
+        });
+    },
     search(option) {
       let uri = "http://localhost:4000/word/" + option + "/" + this.word;
+      this.searchDB();
       this.axios
         .get(uri)
         .then((res) => {
@@ -61,12 +80,10 @@ export default {
           this.meaning.synonyms = [];
           if (option == "google") this.setGoogleMeaning(res);
           else this.setOxfordMeaning(res);
-          console.log(this.meaning);
         })
         .catch(() => {
           this.meaning = {};
           this.meaning = { "not found": "Can not find the meaning " };
-          console.log(this.meaning["not found"]);
         });
     },
     setGoogleMeaning(res) {
@@ -75,17 +92,17 @@ export default {
       for (let i in result) {
         this.meaning.definitions.push(result[i].definition);
         this.meaning.examples.push(result[i].example);
-        this.meaning.synonyms = [
-          ...this.meaning.synonyms,
-          ...result[i].synonyms,
-        ];
+        if (result[i].synonyms)
+          this.meaning.synonyms = [
+            ...this.meaning.synonyms,
+            ...result[i].synonyms,
+          ];
       }
     },
     setOxfordMeaning(res) {
       let result = res.data.results[0];
       this.meaning.word = result.id;
       result = result.lexicalEntries[0].entries[0].senses[0];
-      console.log(result.definitions);
       this.meaning.definitions.push(result.definitions[0]);
       for (let i in result.examples) {
         this.meaning.examples.push(result.examples[i].text);
@@ -93,6 +110,16 @@ export default {
       for (let i in result.synonyms) {
         this.meaning.synonyms.push(result.synonyms[i].text);
       }
+    },
+    saveMeaning() {
+      this.axios
+        .post("http://localhost:4000/word/save", this.meaning)
+        .then(() => {
+          console.log("meaning added");
+        })
+        .catch((err) => {
+          console.log(err.data);
+        });
     },
   },
 };
