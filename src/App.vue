@@ -4,17 +4,18 @@
       <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link to="/" class="nav-link">Home</router-link>
+            <router-link to="/" class="nav-link">Search</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/meanings" class="nav-link"
-              >Create Post</router-link
+              >Saved Meanings</router-link
             >
           </li>
         </ul>
       </nav>
-      <br />
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
