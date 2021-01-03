@@ -2,8 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const PORT = 4000;
+const path = require("path");
+const serveStatic = require("serve-static");
+
+const PORT = process.env.PORT || 4000;
+
 const app = express();
+app.use(serveStatic(path.join(__dirname, "dist")));
+
 const Router = require("./meaningRouter");
 const config = require("./config");
 
