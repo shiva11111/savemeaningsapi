@@ -2,18 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const serverless = require("serverless-http");
-const router = express.Router();
+// const router = express.Router();
 const app = express();
-
-const Router = require("../meaningRouter");
-const config = require("../config");
+const PORT = process.env.PORT || 4000;
+const Router = require("./meaningRouter");
+const config = require("./config");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(Router);
-app.use("/.netlify/functions/api", Router);
+app.use("/", Router);
 
 mongoose
   .connect(config.DB, {
@@ -27,5 +25,6 @@ mongoose
   .catch((err) => {
     console.log(err.message);
   });
-module.exports = app;
-module.exports.handler = serverless(app);
+app.listen(PORT, function() {
+  console.log("app running on port" + PORT);
+});
