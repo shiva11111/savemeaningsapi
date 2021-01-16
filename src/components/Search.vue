@@ -56,7 +56,7 @@ export default {
   methods: {
     async searchDB() {
       await this.axios
-        .get("http://localhost:4000/word/get/" + this.word)
+        .get("https://savemeaning-api.herokuapp.com/get/" + this.word)
         .then((r) => {
           if (r.data.length > 0) {
             this.exists = true;
@@ -69,7 +69,8 @@ export default {
         });
     },
     search(option) {
-      let uri = "http://localhost:4000/word/" + option + "/" + this.word;
+      let uri =
+        "https://savemeaning-api.herokuapp.com/" + option + "/" + this.word;
       this.searchDB();
       this.axios
         .get(uri)
@@ -113,7 +114,7 @@ export default {
     },
     saveMeaning() {
       this.axios
-        .post("http://localhost:4000/word/save", this.meaning)
+        .post("https://savemeaning-api.herokuapp.com/save", this.meaning)
         .then(() => {
           console.log("meaning added");
         })
