@@ -117,6 +117,7 @@ export default {
         .post("https://savemeaning-api.herokuapp.com/save", this.meaning)
         .then(() => {
           console.log("meaning added");
+          this.exists = true;
         })
         .catch((err) => {
           console.log(err.data);

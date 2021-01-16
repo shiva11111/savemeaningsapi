@@ -26,4 +26,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.nav-link:active {
+  color: white;
+}
+</style>
